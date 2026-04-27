@@ -419,6 +419,25 @@
     }
 
     /* ─── SPOTIFY ─── */
+    .sp-cover {
+      width: 200px;
+      height: 200px;
+      border-radius: 16px;
+      object-fit: cover;
+      margin: 0 auto .8rem;
+      display: block;
+      box-shadow:
+        0 0 0 3px #1DB954,
+        0 12px 40px rgba(0,0,0,.6),
+        0 0 30px rgba(29,185,84,.25);
+      animation: coverFloat 4s ease-in-out infinite;
+    }
+    @keyframes coverFloat {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-8px) scale(1.02); }
+    }
+
+    /* ─── SPOTIFY ─── */
     .spotify-card {
       background: linear-gradient(145deg, #0d1a0d, #121212);
       border: 2px solid #1DB954;
@@ -652,7 +671,7 @@
   <!-- SPOTIFY -->
   <section class="seccion reveal" style="padding-top:0;">
     <div class="spotify-card">
-      <span class="sp-nota">🎵</span>
+      <img src="PortadaSingle.png" alt="El Conejo Camina a Tu Lado - Portada" class="sp-cover">
       <div class="sp-titulo">¿Escuchaste la canción oficial?</div>
       <p class="sp-cancion">
         <strong>"El Conejo Camina a Tu Lado"</strong><br>
