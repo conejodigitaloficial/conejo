@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>🐇 El Conejo de Tuxtla | Jovani Salazar</title>
+  <meta name="description" content="Conoce al Amigo Conejo de Tuxtla Gutiérrez, Chiapas. Síguenos en redes y escucha la canción oficial en Spotify.">
+  <meta property="og:title" content="🐇 El Conejo de Tuxtla | Jovani Salazar">
+  <meta property="og:description" content="¡El Conejo camina a tu lado! Síguenos en redes sociales.">
+  <meta property="og:image" content="https://via.placeholder.com/600x315/E8001D/FFD000?text=El+Conejo+de+Tuxtla">
+
+  <!-- ═══ GOOGLE ANALYTICS ═══ -->
+  <!-- INSTRUCCIÓN: Reemplaza G-XXXXXXXXXX con tu ID real de GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+
+    // Detectar si viene de QR (agrega ?qr=1 a la URL del QR)
+    document.addEventListener('DOMContentLoaded', () => {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get('qr') === '1') {
+        gtag('event', 'qr_escaneo', {
+          event_category: 'adquisicion',
+          event_label: 'pancarta_evento'
+        });
+        // Solicitar geolocalización y enviarla como evento
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            pos => {
+              gtag('event', 'qr_ubicacion', {
+                event_category: 'geo',
+                event_label: `${pos.coords.latitude.toFixed(4)},${pos.coords.longitude.toFixed(4)}`,
+                value: 1
+              });
+            },
+            () => {} // silencioso si niega permiso
+          );
+        }
+      }
+    });
+
+    function trackear(accion, etiqueta) {
+      gtag('event', accion, { event_category: 'interaccion', event_label: etiqueta });
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Russo+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════════
+       TOKENS
+    ═══════════════════════════════════ */
+    :root {
+      --rojo:    #E8001D;
+      --dorado:  #FFD000;
+      --naranja: #FF6B00;
+      --negro:   #070707;
+      --gris1:   #111111;
+      --gris2:   #1c1c1c;
+      --blanco:  #FFF8EE;
+      --verde-s: #1DB954;
+      --azul-fb: #1877F2;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--negro);
+      color: var(--blanco);
+      font-family: 'Nunito', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ═══════════════════════════════════
+       PARTÍCULAS FONDO
+    ═══════════════════════════════════ */
+    #canvas-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════
+       MODAL
+    ═══════════════════════════════════ */
+    #modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-inner {
+      background: linear-gradient(160deg, #1a0005 0%, #0d0d0d 60%, #0a1500 100%);
+      border: 2.5px solid var(--dorado);
+      border-radius: 24px;
+      max-width: 400px;
+      width: 100%;
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+      box-shadow:
+        0 0 0 1px rgba(255,208,0,.15),
+        0 0 50px rgba(232,0,29,.25),
+        0 0 100px rgba(255,208,0,.1);
+      animation: modalPop .55s cubic-bezier(.34,1.56,.64,1) both;
+    }
+
+    @keyframes modalPop {
+      from { transform: scale(.4) rotate(-8deg); opacity:0; }
+      to   { transform: scale(1)  rotate(0deg);  opacity:1; }
+    }
+
+    .m-rabbit {
+      display: block;
+      font-size: 4.5rem;
+      line-height: 1;
+      animation: rabbitDance 1.2s ease-in-out infinite alternate;
+    }
+    @keyframes rabbitDance {
+      from { transform: rotate(-8deg) scale(.95); }
+      to   { transform: rotate(8deg)  scale(1.05); }
+    }
+
+    .m-titulo {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 2.4rem;
+      color: var(--dorado);
+      text-shadow: 3px 3px 0 var(--rojo);
+      letter-spacing: 2px;
+      margin: .6rem 0 .3rem;
+      line-height: 1;
+    }
+
+    .m-sub {
+      font-size: .92rem;
+      color: #c0b8a8;
+      line-height: 1.55;
+      margin-bottom: 1.4rem;
+    }
+    .m-sub b { color: var(--dorado); }
+
+    .m-btns { display: flex; flex-direction: column; gap: .55rem; }
+
+    .m-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .6rem;
+      padding: .8rem 1rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: .95rem;
+      border: none;
+      cursor: pointer;
+      transition: transform .15s, filter .15s;
+      color: #fff;
+    }
+    .m-btn:hover { transform: scale(1.04); filter: brightness(1.15); }
+    .m-btn:active { transform: scale(.97); }
+
+    .m-fb  { background: var(--azul-fb); box-shadow: 0 5px 20px rgba(24,119,242,.4); }
+    .m-ig  { background: linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045); box-shadow: 0 5px 20px rgba(220,39,67,.35); }
+    .m-tt  { background: #111; border: 1.5px solid #fff; }
+    .m-badge-fb {
+      display: inline-block;
+      background: var(--dorado);
+      color: var(--negro);
+      font-size: .6rem;
+      font-weight: 900;
+      padding: .1rem .5rem;
+      border-radius: 50px;
+      letter-spacing: 1px;
+      margin-left: .3rem;
+    }
+
+    .m-skip {
+      margin-top: .9rem;
+      background: transparent;
+      border: 1px solid #333;
+      color: #666;
+      padding: .45rem 1.4rem;
+      border-radius: 50px;
+      font-size: .8rem;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      transition: color .2s, border-color .2s;
+    }
+    .m-skip:hover { color: var(--dorado); border-color: var(--dorado); }
+
+    /* ═══════════════════════════════════
+       MAIN
+    ═══════════════════════════════════ */
+    main { position: relative; z-index: 1; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 1.5rem 2rem;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(232,0,29,.18) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 50% 80%, rgba(255,208,0,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(232,0,29,.15);
+      border: 1px solid rgba(232,0,29,.4);
+      color: #ff6666;
+      font-family: 'Bebas Neue', cursive;
+      font-size: .9rem;
+      letter-spacing: 3px;
+      padding: .3rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 1rem;
+    }
+    .chip-dot {
+      width: 7px; height: 7px;
+      background: var(--rojo);
+      border-radius: 50%;
+      animation: blink 1.1s ease infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity:1; }
+      50%      { opacity:.2; }
+    }
+
+    .hero-icon {
+      font-size: 5rem;
+      display: block;
+      margin: .3rem 0;
+      animation: heroFloat 3.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(255,208,0,.4));
+    }
+    @keyframes heroFloat {
+      0%,100% { transform: translateY(0) rotate(-4deg) scale(1); }
+      50%      { transform: translateY(-20px) rotate(4deg) scale(1.05); }
+    }
+
+    .hero-nombre {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(3.2rem, 14vw, 7.5rem);
+      line-height: .9;
+      color: var(--dorado);
+      text-shadow:
+        4px 4px 0 var(--rojo),
+        7px 7px 0 rgba(0,0,0,.6);
+      letter-spacing: 3px;
+      margin: .3rem 0;
+    }
+
+    .hero-apodo {
+      font-family: 'Russo One', sans-serif;
+      font-size: clamp(1.1rem, 4.5vw, 2rem);
+      color: #fff;
+      letter-spacing: 4px;
+      text-shadow: 2px 2px 0 var(--rojo);
+      margin-bottom: .8rem;
+    }
+
+    .hero-desc {
+      max-width: 360px;
+      color: #a09880;
+      font-size: .95rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .emoji-row {
+      display: flex;
+      gap: .3rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-size: 1.6rem;
+      margin: .8rem 0;
+    }
+    .emoji-row span {
+      display: inline-block;
+      animation: emojiPop ease-in-out infinite alternate;
+    }
+    .emoji-row span:nth-child(1)  { animation-duration:1.8s; animation-delay:0s; }
+    .emoji-row span:nth-child(2)  { animation-duration:2.1s; animation-delay:.2s; }
+    .emoji-row span:nth-child(3)  { animation-duration:1.6s; animation-delay:.4s; }
+    .emoji-row span:nth-child(4)  { animation-duration:2.3s; animation-delay:.6s; }
+    .emoji-row span:nth-child(5)  { animation-duration:1.9s; animation-delay:.8s; }
+    .emoji-row span:nth-child(6)  { animation-duration:2.0s; animation-delay:1s; }
+    .emoji-row span:nth-child(7)  { animation-duration:1.7s; animation-delay:1.2s; }
+    @keyframes emojiPop {
+      from { transform: translateY(0) scale(1); }
+      to   { transform: translateY(-10px) scale(1.15); }
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #444;
+      font-size: .75rem;
+      letter-spacing: 2px;
+      animation: hintFade 2s ease infinite alternate;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .3rem;
+    }
+    @keyframes hintFade {
+      from { opacity:.3; transform: translateX(-50%) translateY(0); }
+      to   { opacity:.8; transform: translateX(-50%) translateY(6px); }
+    }
+    .scroll-arrow { font-size: 1.2rem; }
+
+    /* ─── REDES ─── */
+    .seccion {
+      position: relative; z-index:1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    .sec-titulo {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 2.2rem;
+      color: var(--dorado);
+      text-shadow: 2px 2px 0 var(--rojo);
+      letter-spacing: 3px;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .red-btn {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.3rem;
+      border-radius: 18px;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 1rem;
+      margin-bottom: .75rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .red-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,.06) 0%, transparent 100%);
+    }
+    .red-btn:hover { transform: translateX(8px) scale(1.02); }
+    .red-btn::after {
+      content: '→';
+      position: absolute;
+      right: 1.2rem;
+      font-size: 1.2rem;
+      opacity: .7;
+      transition: transform .2s, opacity .2s;
+    }
+    .red-btn:hover::after { transform: translateX(5px); opacity:1; }
+
+    .r-fb { background: var(--azul-fb); color:#fff; box-shadow: 0 8px 30px rgba(24,119,242,.3); }
+    .r-ig { background: linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045); color:#fff; box-shadow: 0 8px 30px rgba(220,39,67,.3); }
+    .r-tt { background: #111; color:#fff; border: 1.5px solid rgba(255,255,255,.2); }
+
+    .r-icon { font-size: 2.2rem; flex-shrink:0; }
+    .r-info  { display:flex; flex-direction:column; }
+    .r-name  { font-size:1rem; }
+    .r-desc  { font-size:.75rem; opacity:.7; font-weight:400; }
+
+    .r-star {
+      position: absolute;
+      top: .45rem;
+      right: 2.4rem;
+      background: var(--dorado);
+      color: var(--negro);
+      font-size: .58rem;
+      font-weight: 900;
+      padding: .12rem .5rem;
+      border-radius: 50px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .separador {
+      text-align: center;
+      font-size: 1.5rem;
+      letter-spacing: 8px;
+      color: #333;
+      margin: 1rem 0;
+    }
+
+    /* ─── SPOTIFY ─── */
+    .spotify-card {
+      background: linear-gradient(145deg, #0d1a0d, #121212);
+      border: 2px solid #1DB954;
+      border-radius: 24px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 0 60px rgba(29,185,84,.15), 0 0 20px rgba(29,185,84,.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .spotify-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 150px; height: 150px;
+      background: radial-gradient(circle, rgba(29,185,84,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .sp-nota {
+      font-size: 3.5rem;
+      display: inline-block;
+      animation: spinNote 4s linear infinite;
+    }
+    @keyframes spinNote {
+      from { transform: rotate(0deg) scale(1); }
+      50%  { transform: rotate(180deg) scale(1.2); }
+      to   { transform: rotate(360deg) scale(1); }
+    }
+
+    .sp-titulo {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.8rem;
+      color: #1DB954;
+      letter-spacing: 2px;
+      margin: .5rem 0 .2rem;
+    }
+
+    .sp-cancion {
+      font-size: .95rem;
+      color: #888;
+      margin-bottom: 1.3rem;
+      line-height: 1.5;
+    }
+    .sp-cancion strong { color: var(--dorado); font-style: normal; }
+
+    .btn-spotify {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: #1DB954;
+      color: #000;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1rem;
+      padding: .9rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 8px 30px rgba(29,185,84,.35);
+      transition: transform .15s, box-shadow .15s;
+      letter-spacing: .3px;
+    }
+    .btn-spotify:hover { transform: scale(1.07); box-shadow: 0 12px 40px rgba(29,185,84,.55); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative; z-index:1;
+      text-align: center;
+      padding: 2rem 1rem 3rem;
+      border-top: 1px solid #1a1a1a;
+      color: #3a3a3a;
+      font-size: .82rem;
+    }
+    footer b { color: var(--dorado); }
+
+    /* ─── REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .is-visible { opacity:1; transform: translateY(0); }
+
+    /* ─── BARRA PROGRESO AUDIO ─── */
+    #audio-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 900;
+      background: rgba(10,10,10,.9);
+      border-top: 1px solid rgba(255,208,0,.25);
+      backdrop-filter: blur(10px);
+      padding: .6rem 1.2rem;
+      display: none;
+      align-items: center;
+      gap: .8rem;
+      font-size: .82rem;
+    }
+    #audio-bar.show { display: flex; }
+    .ab-icon { font-size: 1.3rem; animation: pulse2 1.5s ease infinite; }
+    @keyframes pulse2 { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+    .ab-text { flex:1; color:#aaa; }
+    .ab-text b { color: var(--dorado); }
+    .ab-toggle {
+      background: var(--dorado);
+      border: none;
+      color: var(--negro);
+      font-size: .75rem;
+      font-weight: 900;
+      padding: .3rem .8rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Barra de audio fija (aparece después del modal) -->
+<div id="audio-bar">
+  <span class="ab-icon">🎵</span>
+  <div class="ab-text"><b>El Conejo Camina a Tu Lado</b> · Reproduciendo…</div>
+  <button class="ab-toggle" id="ab-btn" onclick="toggleAudio()">⏸ Pausar</button>
+</div>
+
+<!-- Audio (reemplaza src con tu archivo o link directo) -->
+<audio id="audio" loop preload="none">
+  <!-- INSTRUCCIÓN: Pon aquí el archivo MP3 de la canción -->
+  <!-- <source src="cancion.mp3" type="audio/mpeg"> -->
+</audio>
+
+<!-- Canvas partículas fondo -->
+<canvas id="canvas-bg"></canvas>
+
+<!-- ═══ MODAL ═══ -->
+<div id="modal" role="dialog" aria-modal="true" aria-label="Bienvenida">
+  <div class="modal-inner">
+    <span class="m-rabbit">🐇</span>
+    <div class="m-titulo">¡El Conejo<br>de Tuxtla!</div>
+    <p class="m-sub">
+      Síguenos en todas las redes 📲<br>
+      Mantente al tanto de todos los eventos 🗓️<br>
+      Conoce más sobre tu <b>Amigo Conejo</b> 🥊
+    </p>
+    <div class="m-btns">
+      <a href="https://www.facebook.com/TU_FACEBOOK_AQUI"
+         target="_blank" rel="noopener"
+         class="m-btn m-fb"
+         onclick="trackear('click_red','facebook_modal')">
+        👍 Facebook
+        <span class="m-badge-fb">⭐ PRINCIPAL</span>
+      </a>
+      <a href="https://www.instagram.com/TU_INSTAGRAM_AQUI"
+         target="_blank" rel="noopener"
+         class="m-btn m-ig"
+         onclick="trackear('click_red','instagram_modal')">
+        📸 Instagram
+      </a>
+      <a href="https://www.tiktok.com/@TU_TIKTOK_AQUI"
+         target="_blank" rel="noopener"
+         class="m-btn m-tt"
+         onclick="trackear('click_red','tiktok_modal')">
+        🎵 TikTok
+      </a>
+    </div>
+    <button class="m-skip" onclick="cerrarModal()">Ver el sitio completo →</button>
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-chip">
+      <div class="chip-dot"></div>
+      TUXTLA GUTIÉRREZ · CHIAPAS
+    </div>
+    <span class="hero-icon">🐇</span>
+    <h1 class="hero-nombre">JOVANI<br>SALAZAR</h1>
+    <p class="hero-apodo">EL CONEJO DE TUXTLA</p>
+    <p class="hero-desc">Comprometido con el pueblo 💪<br>Con la fuerza de Chiapas en el corazón 🌿</p>
+    <div class="emoji-row">
+      <span>🐇</span><span>🥊</span><span>🐆</span><span>🐺</span><span>🔥</span><span>🌿</span><span>💪</span>
+    </div>
+    <div class="scroll-hint">
+      <span class="scroll-arrow">↓</span>
+      REDES SOCIALES
+    </div>
+  </section>
+
+  <!-- REDES -->
+  <section class="seccion reveal">
+    <div class="sec-titulo">📲 Síguenos Ahora</div>
+
+    <a href="https://www.facebook.com/TU_FACEBOOK_AQUI"
+       target="_blank" rel="noopener"
+       class="red-btn r-fb"
+       onclick="trackear('click_red','facebook_main')">
+      <span class="r-star">⭐ PRINCIPAL</span>
+      <span class="r-icon">👍</span>
+      <div class="r-info">
+        <span class="r-name">Facebook</span>
+        <span class="r-desc">Eventos, noticias y transmisiones en vivo</span>
+      </div>
+    </a>
+
+    <a href="https://www.instagram.com/TU_INSTAGRAM_AQUI"
+       target="_blank" rel="noopener"
+       class="red-btn r-ig"
+       onclick="trackear('click_red','instagram_main')">
+      <span class="r-icon">📸</span>
+      <div class="r-info">
+        <span class="r-name">Instagram</span>
+        <span class="r-desc">Fotos y momentos del Conejo</span>
+      </div>
+    </a>
+
+    <a href="https://www.tiktok.com/@TU_TIKTOK_AQUI"
+       target="_blank" rel="noopener"
+       class="red-btn r-tt"
+       onclick="trackear('click_red','tiktok_main')">
+      <span class="r-icon">🎵</span>
+      <div class="r-info">
+        <span class="r-name">TikTok</span>
+        <span class="r-desc">Videos virales 🔥</span>
+      </div>
+    </a>
+
+    <div class="separador">🐇 🥊 🐆 🐺 🔥</div>
+  </section>
+
+  <!-- SPOTIFY -->
+  <section class="seccion reveal" style="padding-top:0;">
+    <div class="spotify-card">
+      <span class="sp-nota">🎵</span>
+      <div class="sp-titulo">¿Escuchaste la canción oficial?</div>
+      <p class="sp-cancion">
+        <strong>"El Conejo Camina a Tu Lado"</strong><br>
+        La canción del Amigo Conejo de Tuxtla 🐇
+      </p>
+      <a href="https://open.spotify.com/TU_LINK_SPOTIFY_AQUI"
+         target="_blank" rel="noopener"
+         class="btn-spotify"
+         onclick="trackear('click_spotify','boton_principal')">
+        🎧 Escuchar en Spotify
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div style="font-size:1.4rem; letter-spacing:8px; margin-bottom:.8rem; color:#222">🐇🥊🐆🐺🔥🌿</div>
+  <b>Jovani Salazar</b> · El Amigo Conejo de Tuxtla<br>
+  Tuxtla Gutiérrez, Chiapas · <span id="anio"></span>
+</footer>
+
+<script>
+/* ═══════════════════════════════════
+   AÑO
+═══════════════════════════════════ */
+document.getElementById('anio').textContent = new Date().getFullYear();
+
+/* ═══════════════════════════════════
+   CANVAS PARTÍCULAS
+═══════════════════════════════════ */
+(function(){
+  const canvas = document.getElementById('canvas-bg');
+  const ctx = canvas.getContext('2d');
+  const EMOJIS = ['🐇','🥊','🐆','🐺','🔥','🌿','💪','⭐','🎵'];
+  let W, H, particles = [];
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for(let i=0;i<28;i++){
+    particles.push({
+      x: Math.random()*100,
+      y: Math.random()*100,
+      size: 14 + Math.random()*18,
+      speed: .01 + Math.random()*.025,
+      emoji: EMOJIS[Math.floor(Math.random()*EMOJIS.length)],
+      opacity: .04 + Math.random()*.07,
+      drift: (Math.random()-.5)*.008
+    });
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{
+      p.y -= p.speed;
+      p.x += p.drift;
+      if(p.y < -5){ p.y = 105; p.x = Math.random()*100; }
+      if(p.x < -5) p.x = 105;
+      if(p.x > 105) p.x = -5;
+      ctx.globalAlpha = p.opacity;
+      ctx.font = `${p.size}px serif`;
+      ctx.fillText(p.emoji, p.x/100*W, p.y/100*H);
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ═══════════════════════════════════
+   MODAL
+═══════════════════════════════════ */
+let audioIniciado = false;
+
+function cerrarModal(){
+  const modal = document.getElementById('modal');
+  modal.style.transition = 'opacity .3s ease';
+  modal.style.opacity = '0';
+  setTimeout(()=>{
+    modal.style.display = 'none';
+    iniciarAudio();
+  }, 300);
+  trackear('modal_cerrado','boton_entrar');
+}
+
+// Cerrar si click fuera del modal-inner
+document.getElementById('modal').addEventListener('click', function(e){
+  if(e.target === this) cerrarModal();
+});
+
+/* ═══════════════════════════════════
+   AUDIO
+═══════════════════════════════════ */
+function iniciarAudio(){
+  if(audioIniciado) return;
+  const audio = document.getElementById('audio');
+  if(!audio.querySelector('source')) return; // No hay archivo configurado
+  audioIniciado = true;
+  audio.volume = .35;
+  audio.play().then(()=>{
+    document.getElementById('audio-bar').classList.add('show');
+    trackear('audio_inicio','autoplay_post_modal');
+  }).catch(()=>{
+    // Bloqueado por el navegador — comportamiento normal en móvil
+    // El usuario puede activarlo tocando la pantalla
+    document.body.addEventListener('touchstart', function handler(){
+      audio.play().then(()=>{
+        document.getElementById('audio-bar').classList.add('show');
+      }).catch(()=>{});
+      document.body.removeEventListener('touchstart', handler);
+    }, {once:true});
+  });
+}
+
+function toggleAudio(){
+  const audio = document.getElementById('audio');
+  const btn = document.getElementById('ab-btn');
+  if(audio.paused){
+    audio.play();
+    btn.textContent = '⏸ Pausar';
+    trackear('audio_play','barra_inferior');
+  } else {
+    audio.pause();
+    btn.textContent = '▶ Reanudar';
+    trackear('audio_pause','barra_inferior');
+  }
+}
+
+/* ═══════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════ */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('is-visible'); });
+}, { threshold:.12 });
+
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
